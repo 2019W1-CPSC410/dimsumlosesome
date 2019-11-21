@@ -1,4 +1,5 @@
 import axios from "axios";
+import {CLIENT_ID, CLIENT_SECRET} from "../constants"
 
 const baseUrl = "https://api.github.com/repos/";
 
@@ -20,10 +21,16 @@ class GitHubClient {
         return baseUrl + `${this.owner}/${this.repo}/`;
     }
 
+    getAuthParameters() {
+        return `?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`;
+    }
+
+
+
     // Gets all pull request for given repo
     async getPRForRepo(state="all") {
         try {
-            const response = await axios.get(this.getBaseUrl() + `pulls?state=${state}`, headers);
+            const response = await axios.get(this.getBaseUrl() + `pulls${this.getAuthParameters()}state=${state}`, headers);
             let data = response.data;
             data = data.map((pr) => {
                 return {"created_at": pr.created_at,
@@ -33,10 +40,10 @@ class GitHubClient {
                     "merge_commit_sha": pr.merge_commit_sha,
                     "number": pr.number}
             });
-            console.log(data);
             return data;
         } catch (error) {
             console.log(error);
+            console.log("getPRForRepo")
         }
     };
 
@@ -46,9 +53,11 @@ class GitHubClient {
             return;
         }
         try {
-            const response = await axios.get(this.getBaseUrl() + `pulls/${pull_number}/files`, headers);
+            const response = await axios.get(this.getBaseUrl() + `pulls/${pull_number}/files${this.getAuthParameters()}`, headers);
             let data = response.data;
             data = data.map((file) => {
+                console.log('file!!!!!')
+                console.log(file);
                 return {
                     "raw_url": file.raw_url,
                     "additions": file.additions,
@@ -59,6 +68,7 @@ class GitHubClient {
             return data;
         } catch (error) {
             console.log(error);
+            console.log("getFilesForPr")
         }
     }
 
@@ -66,12 +76,15 @@ class GitHubClient {
     // could potentially save save this file in its correct format (e.g. javascript)
     // and run linter on files 1 by 1
     async getFileString(raw_url) {
+        console.log(raw_url);
         try {
             const response = await axios.get(raw_url, headers);
             let data = response.data;
             return data;
         } catch (error) {
-            console.log(error);
+            // console.log(error);
+            console.log("getFileString")
+
         }
     }
 
