@@ -1,7 +1,7 @@
 import React from 'react';
 import LinkComponent from './components/LinkComponent';
 
-const App = (props) => {
+const App = () => {
   return (
     <div>
       <LinkComponent />
