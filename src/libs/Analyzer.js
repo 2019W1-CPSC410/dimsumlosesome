@@ -5,20 +5,22 @@ class Analyzer {
     }
 
     saveApiResponse(pullRequest) {
+        let prNumber = Object.keys(pullRequest)[0];
 
-        const dateDifference = pullRequest.dateMerged - pullRequest.dateCreated;
+        let dateDifference = Date.parse(pullRequest[prNumber].dateMerged)
+            - Date.parse(pullRequest[prNumber].dateCreated);
 
-        if (dateDifference / pullRequest.numberOfCommits > 4 * 3600000) {
+        if (dateDifference / pullRequest[prNumber].numberOfCommits > 4 * 3600000) {
             this.apiResponse.plannedPRs.push(
                 {
                     "timeSpan":dateDifference,
-                    "numberOfBugs":pullRequest.numberOfBugs
+                    "numberOfBugs":pullRequest[prNumber].numberOfBugs
                 });
         } else {
             this.apiResponse.fastPRs.push(
                 {
                     "timeSpan":dateDifference,
-                    "numberOfBugs":pullRequest.numberOfBugs
+                    "numberOfBugs":pullRequest[prNumber].numberOfBugs
                 });
         }
     }
