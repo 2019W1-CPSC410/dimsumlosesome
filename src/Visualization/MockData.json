@@ -1,0 +1,43 @@
+{
+   "Repository": {
+      "name": "Second 410 Proooooject",
+      "created_at": "2011-01-26T19:01:12Z"
+   },
+   "PullRequests": [
+      {
+         "code_quality": 0.7,
+         "created_at": "2011-01-26T19:01:12Z",
+         "approach": "quickly",
+         "title": "trying ma best",
+         "author": "Person ONE"
+      },
+      {
+         "code_quality": 0.65,
+         "created_at": "2012-01-26T19:01:12Z",
+         "approach": "quickly",
+         "title": "i HOPE this works",
+         "author": "Person TWO"
+      },
+      {
+         "code_quality": 1,
+         "created_at": "2011-03-26T19:01:12Z",
+         "approach": "slowly",
+         "title": "Added npm packages",
+         "author": "Candice"
+      },
+      {
+         "code_quality": 0.7,
+         "created_at": "2011-01-28T19:01:12Z",
+         "approach": "quickly",
+         "title": "git test hehe",
+         "author": "PERSON FOUR"
+      },
+      {
+         "code_quality": 0.2,
+         "created_at": "2011-06-26T19:01:12Z",
+         "approach": "slowly",
+         "title": "Multivariable calculus and analytics geometry merge",
+         "author": "Ruben"
+      }
+   ]
+}
