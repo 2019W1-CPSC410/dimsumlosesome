@@ -4,6 +4,8 @@ import {
   TextField,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import CodeQualityAnalysisTool from '../CodeQuality/CodeQualityAnalysisTool';
+import axios from "axios";
 
 const styles = {
   container: {
@@ -37,8 +39,15 @@ class LinkComponent extends Component {
     this.setState({ [fieldKey]: event.target.value });
   }
 
-  onClickSubmit = () => {
+  onClickSubmit = async () => {
+    const { link } = this.state;
     // TODO: Call analyze with link
+    try {
+      const response = await axios.get(link);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   render() {
