@@ -4,15 +4,8 @@ import {
   TextField,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { Linter } from 'eslint/lib/linter/index';
-import { SourceCode } from 'eslint/lib/source-code/index';
-import { parseForESLint } from 'babel-eslint/lib/index';
 import CodeQualityAnalysisTool from '../CodeQuality/CodeQualityAnalysisTool';
 
-const linter = new Linter();
-linter.defineParser('babel-eslint', {
-  parseForESLint,
-});
 const tool = new CodeQualityAnalysisTool();
 
 const styles = {
@@ -51,44 +44,7 @@ class LinkComponent extends Component {
     const { link } = this.state;
     // TODO: Call analyze with link
     try {
-      const file = await tool.getFile(link);
-      const lines = SourceCode.splitLines(file);
-      const messages = lines.map(line => linter.verify(
-        line,
-        {
-          parser: 'babel-eslint',
-          parserOptions: {
-            sourceType: 'module',
-            allowImportExportEverywhere: false,
-            codeFrame: true,
-          },
-          env: {
-            browser: true,
-            es6: true,
-            node: true,
-          },
-          extends: 'airbnb',
-          globals: {
-            Atomics: 'readonly',
-            SharedArrayBuffer: 'readonly',
-          },
-          parserOptions: {
-            ecmaFeatures: {
-              jsx: true,
-            },
-            ecmaVersion: 2018,
-            sourceType: 'module',
-          },
-          plugins: [
-            'react',
-          ],
-          useEslintrc: false,
-          rules: {
-            semi: 2,
-            quotes: ["error", "single"],
-          },
-        },
-      ));
+      await tool.getBugsFromFile(link);
     } catch (error) {
       console.log(error);
     }
