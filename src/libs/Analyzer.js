@@ -13,22 +13,22 @@ class Analyzer {
         let pullRequests = Object.keys(obj)[1];
 
         for (const pr of pullRequests) {
-            let pullRequestData = Object.keys(pr)[0];
-            let datePRCreated = Date.parse(pullRequestData.datePRCreated);
+            let data = Object.keys(pr)[0];
+            let datePRCreated = Date.parse(data.datePRCreated);
 
-            let dateDifference = Date.parse(pullRequestData.datePRMerged) - datePRCreated;
+            let dateDifference = Date.parse(data.datePRMerged) - datePRCreated;
 
-            if ((dateDifference / pullRequestData.numberOfCommits) > 4 * 3600000) {
+            if ((dateDifference / data.numberOfCommits) > 4 * 3600000) {
                 this.apiResponse.plannedPRs.push(
                     {
                         "datePRCreated": datePRCreated,
-                        "numberOfBugs": pullRequestData.numberofBugs
+                        "numberOfBugs": data.numberofBugs
                     });
             } else {
                 this.apiResponse.fastPRs.push(
                     {
                         "datePRCreated": datePRCreated,
-                        "numberOfBugs": pullRequestData.numberofBugs
+                        "numberOfBugs": data.numberofBugs
                     });
             }
         }
