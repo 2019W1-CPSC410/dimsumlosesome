@@ -6,9 +6,13 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import { Linter } from 'eslint/lib/linter/index';
 import { SourceCode } from 'eslint/lib/source-code/index';
+import { parseForESLint } from 'babel-eslint/lib/index';
 import CodeQualityAnalysisTool from '../CodeQuality/CodeQualityAnalysisTool';
 
 const linter = new Linter();
+linter.defineParser('babel-eslint', {
+  parseForESLint,
+});
 const tool = new CodeQualityAnalysisTool();
 
 const styles = {
@@ -52,10 +56,21 @@ class LinkComponent extends Component {
       const messages = lines.map(line => linter.verify(
         line,
         {
+          parser: 'babel-eslint',
+          parserOptions: {
+            sourceType: 'module',
+            allowImportExportEverywhere: false,
+            codeFrame: true,
+          },
           env: {
             browser: true,
             es6: true,
             node: true,
+          },
+          extends: 'airbnb',
+          globals: {
+            Atomics: 'readonly',
+            SharedArrayBuffer: 'readonly',
           },
           parserOptions: {
             ecmaFeatures: {
