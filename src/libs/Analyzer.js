@@ -16,7 +16,7 @@ class Analyzer {
             let data = Object.keys(pr)[0];
             let datePRCreated = Date.parse(data.datePRCreated);
 
-            let dateDifference = Date.parse(data.datePRMerged) - datePRCreated;
+            let dateDifference = Date.parse(data.datePRMerged) - Date.parse(datePRCreated);
 
             if ((dateDifference / data.numberOfCommits) > 4 * 3600000) {
                 this.apiResponse.plannedPRs.push(
