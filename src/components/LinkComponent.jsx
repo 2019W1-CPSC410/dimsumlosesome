@@ -4,9 +4,6 @@ import {
   TextField,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import CodeQualityAnalysisTool from '../CodeQuality/CodeQualityAnalysisTool';
-
-const tool = new CodeQualityAnalysisTool();
 
 const styles = {
   container: {
@@ -44,7 +41,7 @@ class LinkComponent extends Component {
     const { link } = this.state;
     // TODO: Call analyze with link
     try {
-      await tool.getBugsFromFile(link);
+      // Example code: await getBugsFromFile(link);
     } catch (error) {
       console.log(error);
     }
