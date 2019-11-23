@@ -14,7 +14,7 @@ class Analyzer {
 
         for (const pr of pullRequests) {
             let data = Object.keys(pr)[0];
-            let datePRCreated = Date.parse(data.datePRCreated);
+            let datePRCreated = data.datePRCreated;
 
             let dateDifference = Date.parse(data.datePRMerged) - Date.parse(datePRCreated);
 
