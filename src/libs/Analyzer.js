@@ -1,31 +1,37 @@
 class Analyzer {
 
     constructor () {
-        this.apiResponse = {"plannedPRs":[],"fastPRs":[]};
+        this.apiResponse = {
+            "dateRepoCreated":"",
+            "plannedPRs":[],
+            "fastPRs":[]
+        };
     }
 
-    saveApiResponse(pullRequest) {
-        let prNumber = Object.keys(pullRequest)[0];
+    getDataPoints(obj) {
+        this.apiResponse.dateRepoCreated = Object.keys(obj)[0];
+        let pullRequests = Object.keys(obj)[1];
 
-        let dateDifference = Date.parse(pullRequest[prNumber].dateMerged)
-            - Date.parse(pullRequest[prNumber].dateCreated);
+        for (const pr of pullRequests) {
+            let pullRequestData = Object.keys(pr)[0];
+            let datePRCreated = Date.parse(pullRequestData.datePRCreated);
 
-        if (dateDifference / pullRequest[prNumber].numberOfCommits > 4 * 3600000) {
-            this.apiResponse.plannedPRs.push(
-                {
-                    "timeSpan":dateDifference,
-                    "numberOfBugs":pullRequest[prNumber].numberOfBugs
-                });
-        } else {
-            this.apiResponse.fastPRs.push(
-                {
-                    "timeSpan":dateDifference,
-                    "numberOfBugs":pullRequest[prNumber].numberOfBugs
-                });
+            let dateDifference = Date.parse(pullRequestData.datePRMerged) - datePRCreated;
+
+            if ((dateDifference / pullRequestData.numberOfCommits) > 4 * 3600000) {
+                this.apiResponse.plannedPRs.push(
+                    {
+                        "datePRCreated": datePRCreated,
+                        "numberOfBugs": pullRequestData.numberofBugs
+                    });
+            } else {
+                this.apiResponse.fastPRs.push(
+                    {
+                        "datePRCreated": datePRCreated,
+                        "numberOfBugs": pullRequestData.numberofBugs
+                    });
+            }
         }
-    }
-
-    getDataPoints() {
         return this.apiResponse;
     }
 }
