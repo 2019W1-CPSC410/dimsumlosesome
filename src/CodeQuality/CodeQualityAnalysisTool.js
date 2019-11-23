@@ -1,30 +1,20 @@
 import axios from 'axios';
 
-const SourceCode = require('eslint').SourceCode;
-const Linter = require('eslint').Linter;
-const parseForESLint = require('babel-eslint').parseForESLint;
 const CLIEngine = require('eslint').CLIEngine;
 
-// Linter configurations
-const linter = new Linter();
-linter.defineParser('babel-eslint', { parseForESLint });
-const verifyConfig = {
+const cli = new CLIEngine({
+  basicConfig: {
+    extends: 'airbnb',
+  },
+  envs: [
+    'browser',
+    'es6',
+    'node',
+  ],
+  extensions: [
+    'jsx',
+  ],
   parser: 'babel-eslint',
-  parserOptions: {
-    sourceType: 'module',
-    allowImportExportEverywhere: false,
-    codeFrame: true,
-  },
-  env: {
-    browser: true,
-    es6: true,
-    node: true,
-  },
-  extends: 'airbnb',
-  globals: {
-    Atomics: 'readonly',
-    SharedArrayBuffer: 'readonly',
-  },
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -35,49 +25,13 @@ const verifyConfig = {
   plugins: [
     'react',
   ],
-  useEslintrc: false,
-};
-
-const cli = new CLIEngine({
-  baseConfig: {
-    "parser": "babel-eslint",
-    "env": {
-      "browser": true,
-      "es6": true,
-      "node": true
-    },
-    "extends": "airbnb",
-    "globals": {
-      "Atomics": "readonly",
-      "SharedArrayBuffer": "readonly"
-    },
-    "parserOptions": {
-      "ecmaFeatures": {
-        "jsx": true
-      },
-      "ecmaVersion": 2018,
-      "sourceType": "module"
-    },
-    "plugins": [
-      "react"
-    ],
-    "rules": {
-      "import/no-unresolved": [
-        "error",
-        {
-          "ignore": [
-            "^meteor/",
-            "^/"
-          ]
-        }
-      ]
-    }
-  },
-  envs: ["browser", "mocha"],
-  useEslintrc: false,
+  useEslintrc: true,
   rules: {
-    semi: 2
-  }
+    'import/no-unresolved': [
+      2,
+      { ignore: ['.png$', '.webp$', '.jpg$'] }
+    ],
+  },
 });
 
 class CodeQualityAnalysisTool {
@@ -101,18 +55,12 @@ class CodeQualityAnalysisTool {
   async getBugsFromFile(url) {
     try {
       const file = await this.getFile(url);
-      const lines = SourceCode.splitLines(file);
-      const messages = lines.map((line, index) => {
-        const lineNumber = index + 1;
-        const errors = linter.verify(line, verifyConfig);
-        console.log(lineNumber, errors);
-        return ({
-          lineNumber,
-          errors,
-        });
-      });
-      // const report = cli.executeOnFiles([code]);
-      // console.log('Report: ', report);
+      const report = cli.executeOnText(file);
+      // results is an array (length is always equal to 1) containing all the warning/error messages
+      if (!report || !report.results || !report.results[0]) {
+        return -1;
+      }
+      return report.results[0].messages.length;
     } catch (error) {
       console.log(error);
     }
