@@ -4,8 +4,12 @@ import {
   TextField,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { Linter } from 'eslint/lib/linter/index';
+import { SourceCode } from 'eslint/lib/source-code/index';
 import CodeQualityAnalysisTool from '../CodeQuality/CodeQualityAnalysisTool';
-import axios from "axios";
+
+const linter = new Linter();
+const tool = new CodeQualityAnalysisTool();
 
 const styles = {
   container: {
@@ -43,8 +47,33 @@ class LinkComponent extends Component {
     const { link } = this.state;
     // TODO: Call analyze with link
     try {
-      const response = await axios.get(link);
-      return response.data;
+      const file = await tool.getFile(link);
+      const lines = SourceCode.splitLines(file);
+      const messages = lines.map(line => linter.verify(
+        line,
+        {
+          env: {
+            browser: true,
+            es6: true,
+            node: true,
+          },
+          parserOptions: {
+            ecmaFeatures: {
+              jsx: true,
+            },
+            ecmaVersion: 2018,
+            sourceType: 'module',
+          },
+          plugins: [
+            'react',
+          ],
+          useEslintrc: false,
+          rules: {
+            semi: 2,
+            quotes: ["error", "single"],
+          },
+        },
+      ));
     } catch (error) {
       console.log(error);
     }
