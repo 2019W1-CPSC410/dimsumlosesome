@@ -10,25 +10,25 @@ class Analyzer {
 
     getDataPoints(obj) {
         this.apiResponse.dateRepoCreated = Object.keys(obj)[0];
-        let pullRequests = Object.keys(obj)[1];
+        let pullRequests = obj.pullRequests;
 
-        for (const pr of pullRequests) {
-            let data = Object.keys(pr)[0];
-            let datePRCreated = data.datePRCreated;
+        for (let pr of pullRequests) {
+            let prNumber = Object.keys(pr)[0];
+            let datePRCreated = pr[prNumber].datePRCreated;
 
-            let dateDifference = Date.parse(data.datePRMerged) - Date.parse(datePRCreated);
+            let dateDifference = Date.parse(pr[prNumber].datePRMerged) - Date.parse(pr[prNumber].datePRCreated);
 
-            if ((dateDifference / data.numberOfCommits) > 4 * 3600000) {
+            if ((dateDifference / pr[prNumber].numberOfCommits) > 4 * 3600000) {
                 this.apiResponse.plannedPRs.push(
                     {
                         "datePRCreated": datePRCreated,
-                        "numberOfBugs": data.numberofBugs
+                        "numberOfBugs": pr[prNumber].numberOfBugs
                     });
             } else {
                 this.apiResponse.fastPRs.push(
                     {
                         "datePRCreated": datePRCreated,
-                        "numberOfBugs": data.numberofBugs
+                        "numberOfBugs": pr[prNumber].numberOfBugs
                     });
             }
         }
