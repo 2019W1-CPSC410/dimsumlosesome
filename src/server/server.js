@@ -1,7 +1,12 @@
 const express = require('express');
 
 const app = express();
-const port = 3000;
+const port = 3010;
+const cors = require('cors');
+
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 var graphDataPoints = [];
 
@@ -15,5 +20,4 @@ app.get('/analyze', (req, res) => {
 
 app.listen(port, () => console.log(`app listening on port ${port}`));
 
-//TODO
-// app.post()
+module.exports = app;
