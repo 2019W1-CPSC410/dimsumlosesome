@@ -63,7 +63,7 @@ class LinkComponent extends Component {
           className={classes.button}
           onClick={() => this.onClickSubmit()}
         >
-          ANALYZE
+          ANALYZE REPO
         </Button>
       </div>
     );
