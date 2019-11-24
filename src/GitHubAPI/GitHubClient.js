@@ -26,7 +26,7 @@ class GitHubClient {
     }
 
     // Gets all pull request for given repo
-    async getPRForRepo(state="open") {
+    async getPRForRepo(state="closed") {
         try {
             const response = await axios.get(this.getBaseUrl() + `pulls${this.getAuthParameters()}&state=${state}`, headers);
             let data = response.data;

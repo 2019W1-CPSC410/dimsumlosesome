@@ -9,26 +9,32 @@ class DataSetBuilder {
         this.tool = new CodeQualityAnalysisTool();
     }
 
-    addNumberOfBugs() {
-        this.getMetaData().then((data) => {
-            Array.from(data.values()).filter((dataValue) => {return dataValue.raw_urls}).map((dataValue) => {
-                console.log('here!!!!!')
+    getFinalData() {
+        return new Promise((resolve, reject) => {
+            this.getMetaData().then(async (data) => {
+                let finalData = Array.from(data.values()).filter((dataValue) => {return dataValue.raw_urls}).map(async (dataValue) => {
+                    console.log('here!!!!!');
 
-                let prNumber = dataValue.pull_number;
-                let numberOfBugs = 0;
-                dataValue.raw_urls.map((url) => {
-                    numberOfBugs = numberOfBugs + this.tool.getBugsFromFile(url);
+                    let prNumber = dataValue.pull_number;
+                    let numberOfBugs = 0;
+                    const bugsPromises = dataValue.raw_urls.map(async (url) => {
+                        const bugs = await this.tool.getBugsFromFile(url);
+                        numberOfBugs = numberOfBugs + bugs;
+                    });
+                    await Promise.all(bugsPromises);
+                    console.log('numberOfBugs');
+                    console.log(numberOfBugs);
+                    this.addToPRData(prNumber, {numberOfBugs: numberOfBugs});
                 });
-                console.log('numberOfBugs')
-                console.log(numberOfBugs);
-                this.addToPRData(prNumber, {numberOfBugs: numberOfBugs});
-            });
 
-            // console.log(this.prData.entries())
+                await Promise.all(finalData);
+                resolve(this.prData);
 
+            }).catch((err) => {
+                reject(err);
+                console.log(err)});
+        });
 
-        }).catch((err) => {
-            console.log(err)});
     }
 
     isJavaScriptFile (fileName) {

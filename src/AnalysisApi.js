@@ -8,5 +8,10 @@ const owner = "uber";
 const repo = "react-map-gl";
 
 let dataSetBuilder = new DataSetBuilder(owner, repo);
-dataSetBuilder.addNumberOfBugs();
-
+let data = dataSetBuilder.getFinalData();
+data.then((finalData) => {
+    console.log('here')
+    console.log(finalData);
+}).catch((err) => {
+    console.log(err)
+})
