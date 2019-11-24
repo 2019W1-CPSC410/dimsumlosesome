@@ -1,5 +1,6 @@
 import React from 'react';
-import { XYPlot, XAxis, YAxis, HorizontalGridLines, VerticalGridLines, MarkSeries, DiscreteColorLegend } from 'react-vis';
+import { XYPlot, XAxis, YAxis, HorizontalGridLines, VerticalGridLines, MarkSeries, DiscreteColorLegend, LineSeries } from 'react-vis';
+import { linearRegression, linearRegressionLine } from 'simple-statistics';
 
 class Visualization extends React.Component {
    constructor(props) {
@@ -41,9 +42,20 @@ class Visualization extends React.Component {
       return processedPRData;
    }
 
+   getBestFitLine(dataPoints) {
+      let pairValues = [];
+      for (let i = 0; i < dataPoints.length; i++) {
+         let dataPoint = dataPoints[i];
+         pairValues[i] = [dataPoint.x, dataPoint.y];
+      }
+      return linearRegressionLine(linearRegression(pairValues));
+   }
+
    render() {
-      let processedPRData = this.processDataForGraph(this.props.data);
       const LONG_PLANNED_PR_COLOR = "black", QUICKLY_WRITTEN_PR = "red";
+      let processedPRData = this.processDataForGraph(this.props.data);
+      let plannedLongPRsBestFitLine = this.getBestFitLine(processedPRData.plannedPRs);
+      let fastPRsBestFitLine = this.getBestFitLine(processedPRData.fastPRs);
       return (
          <React.Fragment>
             <XYPlot width={500} height={500}
@@ -56,10 +68,22 @@ class Visualization extends React.Component {
                   color={LONG_PLANNED_PR_COLOR}
                   opacityType="category"
                   opacity="1" />
+               <LineSeries
+                  color={LONG_PLANNED_PR_COLOR}
+                  data={[
+                     { x: 0, y: plannedLongPRsBestFitLine(0) },
+                     { x: processedPRData.largestDayOffsetFromRepoCreation, y: plannedLongPRsBestFitLine(1) },
+                  ]} />
                <MarkSeries data={processedPRData.fastPRs}
                   color={QUICKLY_WRITTEN_PR}
                   opacityType="category"
                   opacity="1" />
+               <LineSeries
+                  color={QUICKLY_WRITTEN_PR}
+                  data={[
+                     { x: 0, y: fastPRsBestFitLine(0) },
+                     { x: processedPRData.largestDayOffsetFromRepoCreation, y: fastPRsBestFitLine(1) },
+                  ]} />
 
             </XYPlot>
             <DiscreteColorLegend items={[{ title: "Code written quickly", color: QUICKLY_WRITTEN_PR }, { title: "Code written after long planning", color: LONG_PLANNED_PR_COLOR }]}></DiscreteColorLegend>

@@ -24,6 +24,18 @@
       {
          "datePRCreated": "2019-11-22T13:34:45.000-08:00",
          "numberOfBugs": 21
+      },
+      {
+         "datePRCreated": "2019-12-15T13:34:45.000-08:00",
+         "numberOfBugs": 1
+      },
+      {
+         "datePRCreated": "2020-01-18T08:23:45.000-08:00",
+         "numberOfBugs": 5
+      },
+      {
+         "datePRCreated": "2019-12-03T13:34:45.000-08:00",
+         "numberOfBugs": 12
       }
    ],
    "fastPRs": [
