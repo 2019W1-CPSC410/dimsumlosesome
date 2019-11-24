@@ -4,6 +4,7 @@ import {
   TextField,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import axios from 'axios';
 
 const styles = {
   container: {
@@ -41,7 +42,8 @@ class LinkComponent extends Component {
     const { link } = this.state;
     // TODO: Call analyze with link
     try {
-      // Example code: await getBugsFromFile(link);
+      const response = await axios.get('http://localhost:3010/');
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
