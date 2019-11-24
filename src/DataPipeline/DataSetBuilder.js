@@ -1,11 +1,34 @@
 import GitHubClient from "../GitHubAPI/GitHubClient";
-
+import CodeQualityAnalysisTool from '../CodeQuality/CodeQualityAnalysisTool';
 
 class DataSetBuilder {
 
     constructor(owner, repo) {
         this.client = new GitHubClient(owner, repo);
         this.prData = new Map();
+        this.tool = new CodeQualityAnalysisTool();
+    }
+
+    addNumberOfBugs() {
+        this.getMetaData().then((data) => {
+            Array.from(data.values()).filter((dataValue) => {return dataValue.raw_urls}).map((dataValue) => {
+                console.log('here!!!!!')
+
+                let prNumber = dataValue.pull_number;
+                let numberOfBugs = 0;
+                dataValue.raw_urls.map((url) => {
+                    numberOfBugs = numberOfBugs + this.tool.getBugsFromFile(url);
+                });
+                console.log('numberOfBugs')
+                console.log(numberOfBugs);
+                this.addToPRData(prNumber, {numberOfBugs: numberOfBugs});
+            });
+
+            // console.log(this.prData.entries())
+
+
+        }).catch((err) => {
+            console.log(err)});
     }
 
     isJavaScriptFile (fileName) {
@@ -21,7 +44,7 @@ class DataSetBuilder {
         }
     };
 
-    getResult () {
+    getMetaData () {
         return new Promise ((resolve, reject) => {
             let prs = [];
             this.client.getPRForRepo().then(async (result) => {
