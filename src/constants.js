@@ -1,2 +1,2 @@
-export const CLIENT_ID = "Iv1.0568d7e0e7cebe99";
-export const CLIENT_SECRET = "39e085a29cab68bb38213599760015d0e58e3374";
+export const CLIENT_ID = "ff677cf29a9e5babfbf1";
+export const CLIENT_SECRET = "b85f99e48cccc2e891ee1bb6f7466a94d8a329d7";
