@@ -1,10 +1,9 @@
 import React from 'react';
-import { XYPlot, XAxis, YAxis, HorizontalGridLines, VerticalGridLines, MarkSeries } from 'react-vis';
+import { XYPlot, XAxis, YAxis, HorizontalGridLines, VerticalGridLines, MarkSeries, DiscreteColorLegend } from 'react-vis';
 
 class Visualization extends React.Component {
    constructor(props) {
       super(props);
-      this.state = { repoCreation: props.data.dateRepoCreated, plannedPRs: props.data.plannedPRs, fastPRs: props.data.fastPRs };
    };
 
    processDataForGraph(data) {
@@ -44,22 +43,29 @@ class Visualization extends React.Component {
 
    render() {
       let processedPRData = this.processDataForGraph(this.props.data);
+      const LONG_PLANNED_PR_COLOR = "black", QUICKLY_WRITTEN_PR = "red";
       return (
-         <XYPlot width={400} height={400}
-            xDomain={[0, processedPRData.largestDayOffsetFromRepoCreation]} yDomain={[0, processedPRData.highestBugCount]}>
-            <XAxis />
-            <YAxis />
-            <HorizontalGridLines />
-            <VerticalGridLines />
-            <MarkSeries data={processedPRData.plannedPRs}
-               stroke="black"
-               opacityType="category"
-               opacity="1" />
-            <MarkSeries data={processedPRData.fastPRs}
-               stroke="red"
-               opacityType="category"
-               opacity="1" />
-         </XYPlot>
+         <React.Fragment>
+            <XYPlot width={500} height={500}
+               xDomain={[0, processedPRData.largestDayOffsetFromRepoCreation]} yDomain={[0, processedPRData.highestBugCount]}>
+               <XAxis title={"Days since repository creation"} />
+               <YAxis title={"Number of bugs caused"} position={"middle"} />
+               <HorizontalGridLines />
+               <VerticalGridLines />
+               <MarkSeries data={processedPRData.plannedPRs}
+                  color={LONG_PLANNED_PR_COLOR}
+                  opacityType="category"
+                  opacity="1" />
+               <MarkSeries data={processedPRData.fastPRs}
+                  color={QUICKLY_WRITTEN_PR}
+                  opacityType="category"
+                  opacity="1" />
+
+            </XYPlot>
+            <DiscreteColorLegend items={[{ title: "Code written quickly", color: QUICKLY_WRITTEN_PR }, { title: "Code written after long planning", color: LONG_PLANNED_PR_COLOR }]}></DiscreteColorLegend>
+
+         </React.Fragment>
+
       );
    }
 }
