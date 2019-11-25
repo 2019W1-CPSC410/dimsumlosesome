@@ -48,6 +48,10 @@ class LinkComponent extends Component {
   onClickSubmit = async () => {
     const { ownerName } = this.state;
     const { repoName } = this.state;
+    if (!ownerName || !repoName) {
+      alert('Please enter both owner and repo names to proceed');
+    }
+
     try {
       const response = await axios.post('http://localhost:3010/analyze', {
         owner: ownerName,
