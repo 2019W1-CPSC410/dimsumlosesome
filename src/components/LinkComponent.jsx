@@ -62,10 +62,7 @@ class LinkComponent extends Component {
     this.setState({ loading: true });
 
     try {
-      const response = await axios.post('http://localhost:3010/analyze', {
-        owner: ownerName,
-        repo: repoName,
-      });
+      const response = await axios.get(`http://localhost:3010/analyze?owner=${ownerName}&repo=${repoName}`);
       this.populateGraph(response);
     } catch (error) {
       console.log(error);

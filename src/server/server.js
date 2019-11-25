@@ -14,9 +14,8 @@ app.get('/', (req, res) => {
   res.send('empty graph');
 });
 
-app.post('/analyze', async (req, res) => {
-  const { owner } = req.body;
-  const { repo } = req.body;
+app.get('/analyze', async (req, res) => {
+  const { owner, repo } = req.query;
   const analyzer = new Analyzer(owner, repo);
   const response = await analyzer.getDataPoints();
   res.send(response);
