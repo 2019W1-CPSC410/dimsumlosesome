@@ -12,11 +12,13 @@ const cli = new CLIEngine({
     'node',
   ],
   extensions: [
+    'js',
     'jsx',
   ],
   parser: 'babel-eslint',
   parserOptions: {
     ecmaFeatures: {
+      js: true,
       jsx: true,
     },
     ecmaVersion: 2018,

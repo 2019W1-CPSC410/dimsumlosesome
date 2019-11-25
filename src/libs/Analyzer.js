@@ -11,6 +11,7 @@ class Analyzer {
 
     const dataSetBuilder = new DataSetBuilder(this.owner, this.repo);
     const data = await dataSetBuilder.getFinalData();
+    console.log('Analysis completed successfully!');
     data.forEach((prDetails, prKey, map) => {
       const {
         numberOfBugs,

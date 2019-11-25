@@ -37,8 +37,9 @@ class DataSetBuilder {
 
     }
 
-    isJavaScriptFile (fileName) {
-        return fileName.split('.').pop() === 'js';
+    isSupportedFile (fileName) {
+        const fileExtension = fileName.split('.').pop();
+        return fileExtension === 'js' || fileExtension === 'jsx';
     };
 
     addToPRData (prNumber, dataObject) {
@@ -83,7 +84,7 @@ class DataSetBuilder {
                         let prNumber = null;
                         let rawUrls = [];
                         file.map((value) => {
-                            if (this.isJavaScriptFile(value.raw_url)) {
+                            if (this.isSupportedFile(value.raw_url)) {
                                 prNumber = value.pull_number;
                                 rawUrls.push(value.raw_url);
                             }

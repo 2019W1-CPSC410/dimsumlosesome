@@ -9,9 +9,10 @@ var prData = new Map();
 // create client for repo and owner
 let client = new GitHubClient(owner, repo);
 
-// Checks if file is JavasScript file by the file extension
-const isJavaScriptFile = function (fileName) {
-    return fileName.split('.').pop() === 'js';
+// Checks if file is JavasScript or React JSX file by the file extension
+const isSupportedFile = (fileName) => {
+    const fileExtension = fileName.split('.').pop();
+    return fileExtension === 'js' || fileExtension === 'jsx';
 };
 
 // using raw_urls of files in pull requests
@@ -25,7 +26,7 @@ const returnAllFileStrings = function (prs) {
                     let prNumber = null;
                     let rawUrls = [];
                     file.map((value) => {
-                        if (isJavaScriptFile(value.raw_url)) {
+                        if (isSupportedFile(value.raw_url)) {
                             prNumber = value.pull_number;
                             rawUrls.push(value.raw_url);
                         }
