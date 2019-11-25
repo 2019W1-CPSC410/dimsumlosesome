@@ -1,4 +1,4 @@
-import axios from 'axios';
+const axios = require('axios');
 
 const CLIEngine = require('eslint').CLIEngine;
 
@@ -67,4 +67,4 @@ class CodeQualityAnalysisTool {
   }
 }
 
-export default CodeQualityAnalysisTool;
+module.exports = { CodeQualityAnalysisTool };

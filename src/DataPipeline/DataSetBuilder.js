@@ -1,5 +1,5 @@
-import GitHubClient from "../GitHubAPI/GitHubClient";
-import CodeQualityAnalysisTool from '../CodeQuality/CodeQualityAnalysisTool';
+const { GitHubClient } = require('../GitHubAPI/GitHubClient');
+const { CodeQualityAnalysisTool } = require('../CodeQuality/CodeQualityAnalysisTool');
 
 class DataSetBuilder {
 
@@ -62,10 +62,10 @@ class DataSetBuilder {
                 this.buildPRData(prs).then((result) => {
                     resolve(result);
                 }).catch((err) => {
-                    console.log(err)
+                    console.log(err);
                 })
             }).catch((error) => {
-                console.log(err);
+                console.log(error);
                 reject(error);
             });
         })
@@ -113,4 +113,4 @@ class DataSetBuilder {
     };
 }
 
-export default DataSetBuilder;
+module.exports = { DataSetBuilder };

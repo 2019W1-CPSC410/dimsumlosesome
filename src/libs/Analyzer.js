@@ -1,4 +1,4 @@
-import DataSetBuilder from '../DataPipeline/DataSetBuilder';
+const { DataSetBuilder } = require('../DataPipeline/DataSetBuilder');
 
 class Analyzer {
   constructor(owner, repo) {
@@ -55,4 +55,4 @@ class Analyzer {
   }
 }
 
-export default Analyzer;
+module.exports = { Analyzer };

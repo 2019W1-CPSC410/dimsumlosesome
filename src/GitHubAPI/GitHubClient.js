@@ -1,5 +1,6 @@
-import axios from "axios";
-import {CLIENT_ID, CLIENT_SECRET} from "../constants"
+const axios = require('axios');
+const { CLIENT_ID } = require('../constants');
+const { CLIENT_SECRET } = require('../constants');
 
 const baseUrl = "https://api.github.com/repos/";
 
@@ -104,4 +105,4 @@ class GitHubClient {
     }
 }
 
-export default GitHubClient;
+module.exports = { GitHubClient };
