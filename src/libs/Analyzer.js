@@ -39,8 +39,8 @@ class Analyzer {
         numberOfCommits,
         numberOfBugs,
       } = pr;
-      const datePRCreated = new Date(created_at);
-      const datePRMerged = new Date(merged_at);
+      const datePRCreated = new Date(created_at).getTime();
+      const datePRMerged = new Date(merged_at).getTime();
       const dateDifference = datePRMerged - datePRCreated;
       const classifiedPR = { datePRCreated: created_at, numberOfBugs };
 
