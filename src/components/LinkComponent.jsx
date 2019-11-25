@@ -40,10 +40,12 @@ class LinkComponent extends Component {
 
   onClickSubmit = async () => {
     const { link } = this.state;
-    // TODO: Call analyze with link
     try {
-      const response = await axios.get('http://localhost:3010/');
-      console.log(response);
+      // const response = await axios.get('http://localhost:3010/');
+      const response = await axios.post('http://localhost:3010/analyze', {
+        linkToAnalyze: link
+      });
+      console.log(response + " HI");
     } catch (error) {
       console.log(error);
     }
