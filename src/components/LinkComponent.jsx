@@ -12,6 +12,7 @@ const styles = {
   container: {
     display: 'flex',
     flexDirection: 'column',
+    padding: '15px 30px',
   },
   form: {
     display: 'flex',
