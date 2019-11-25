@@ -30,7 +30,8 @@ class LinkComponent extends Component {
     super(props);
 
     this.state = {
-      link: '',
+      ownerName: '',
+      repoName: '',
     };
   }
 
@@ -39,13 +40,15 @@ class LinkComponent extends Component {
   }
 
   onClickSubmit = async () => {
-    const { link } = this.state;
+    const { ownerName } = this.state;
+    const { repoName } = this.state;
     try {
       // const response = await axios.get('http://localhost:3010/');
       const response = await axios.post('http://localhost:3010/analyze', {
-        linkToAnalyze: link
+        owner: ownerName,
+        repo: repoName,
       });
-      console.log(response + " HI");
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -58,8 +61,15 @@ class LinkComponent extends Component {
       <div className={classes.container}>
         <TextField
           variant="outlined"
-          onChange={e => this.onChangeTextField('link', e)}
+          onChange={e => this.onChangeTextField('ownerName', e)}
           className={classes.textField}
+          label="Owner Name"
+        />
+        <TextField
+            variant="outlined"
+            onChange={e => this.onChangeTextField('repoName', e)}
+            className={classes.textField}
+            label="Repo Name"
         />
         <Button
           variant="contained"

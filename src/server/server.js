@@ -18,8 +18,10 @@ app.get('/', (req, res) => {
 });
 
 app.post('/analyze', (req, res) => {
-  let linkToAnalyze = req.body.linkToAnalyze;
-  console.log(linkToAnalyze);
+  let owner = req.body.owner;
+  let repo = req.body.repo;
+  console.log(owner);
+  console.log(repo);
   res.send('IN POST');
 });
 
