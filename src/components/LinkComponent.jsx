@@ -4,6 +4,8 @@ import {
   TextField,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import axios from 'axios';
+import Visualization from '../Visualization/Visualization';
 
 const styles = {
   container: {
@@ -29,7 +31,13 @@ class LinkComponent extends Component {
     super(props);
 
     this.state = {
-      link: '',
+      ownerName: '',
+      repoName: '',
+      graphData: {
+        dateRepoCreated: '',
+        plannedPRs: [],
+        fastPRs: [],
+      },
     };
   }
 
@@ -38,24 +46,43 @@ class LinkComponent extends Component {
   }
 
   onClickSubmit = async () => {
-    const { link } = this.state;
-    // TODO: Call analyze with link
+    const { ownerName } = this.state;
+    const { repoName } = this.state;
     try {
-      // Example code: await getBugsFromFile(link);
+      const response = await axios.post('http://localhost:3010/analyze', {
+        owner: ownerName,
+        repo: repoName,
+      });
+      // console.log(response);
+      this.populateGraph(response);
     } catch (error) {
       console.log(error);
     }
   }
 
+  populateGraph = (response) => {
+    this.setState({ graphData: response.data });
+    // console.log('populateGraph');
+    // console.log(response.data);
+  }
+
   render() {
     const { classes } = this.props;
+    const { graphData } = this.state;
 
     return (
       <div className={classes.container}>
         <TextField
           variant="outlined"
-          onChange={e => this.onChangeTextField('link', e)}
+          onChange={(e) => this.onChangeTextField('ownerName', e)}
           className={classes.textField}
+          label="Owner Name"
+        />
+        <TextField
+          variant="outlined"
+          onChange={(e) => this.onChangeTextField('repoName', e)}
+          className={classes.textField}
+          label="Repo Name"
         />
         <Button
           variant="contained"
@@ -63,8 +90,9 @@ class LinkComponent extends Component {
           className={classes.button}
           onClick={() => this.onClickSubmit()}
         >
-          ANALYZE
+          ANALYZE REPO
         </Button>
+        <Visualization data={graphData} />
       </div>
     );
   }
