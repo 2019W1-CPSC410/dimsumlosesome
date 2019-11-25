@@ -53,16 +53,17 @@ class LinkComponent extends Component {
         owner: ownerName,
         repo: repoName,
       });
+      // console.log(response);
       this.populateGraph(response);
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
   }
 
   populateGraph = (response) => {
-    this.state.graphData = response;
-    console.log('populateGraph');
+    this.setState({ graphData: response.data });
+    // console.log('populateGraph');
+    // console.log(response.data);
   }
 
   render() {
