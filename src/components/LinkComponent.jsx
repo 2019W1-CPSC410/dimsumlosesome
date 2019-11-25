@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
   Button,
+  CircularProgress,
   TextField,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
@@ -9,6 +10,10 @@ import Visualization from '../Visualization/Visualization';
 
 const styles = {
   container: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  form: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -31,6 +36,7 @@ class LinkComponent extends Component {
     super(props);
 
     this.state = {
+      loading: false,
       ownerName: '',
       repoName: '',
       graphData: {
@@ -52,51 +58,58 @@ class LinkComponent extends Component {
       alert('Please enter both owner and repo names to proceed');
     }
 
+    this.setState({ loading: true });
+
     try {
       const response = await axios.post('http://localhost:3010/analyze', {
         owner: ownerName,
         repo: repoName,
       });
-      // console.log(response);
       this.populateGraph(response);
     } catch (error) {
       console.log(error);
     }
+
+    this.setState({ loading: false });
   }
 
   populateGraph = (response) => {
     this.setState({ graphData: response.data });
-    // console.log('populateGraph');
-    // console.log(response.data);
   }
 
   render() {
     const { classes } = this.props;
-    const { graphData } = this.state;
+    const { loading, graphData } = this.state;
 
     return (
       <div className={classes.container}>
-        <TextField
-          variant="outlined"
-          onChange={(e) => this.onChangeTextField('ownerName', e)}
-          className={classes.textField}
-          label="Owner Name"
-        />
-        <TextField
-          variant="outlined"
-          onChange={(e) => this.onChangeTextField('repoName', e)}
-          className={classes.textField}
-          label="Repo Name"
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.button}
-          onClick={() => this.onClickSubmit()}
-        >
-          ANALYZE REPO
-        </Button>
-        <Visualization data={graphData} />
+        <div className={classes.form}>
+          <TextField
+            variant="outlined"
+            onChange={(e) => this.onChangeTextField('ownerName', e)}
+            className={classes.textField}
+            label="Owner Name"
+          />
+          <TextField
+            variant="outlined"
+            onChange={(e) => this.onChangeTextField('repoName', e)}
+            className={classes.textField}
+            label="Repo Name"
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={() => this.onClickSubmit()}
+          >
+            ANALYZE REPO
+          </Button>
+        </div>
+        {
+          loading
+            ? <CircularProgress />
+            : <Visualization data={graphData} />
+        }
       </div>
     );
   }
