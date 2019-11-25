@@ -19,7 +19,7 @@ class Analyzer {
         closed_at,
         created_at,
       } = prDetails;
-      if (!(numberOfBugs && numberOfCommits && merged_at && closed_at && created_at)) return;
+      if (!(numberOfBugs && numberOfCommits && merged_at && closed_at && created_at && numberOfBugs !== -1)) return;
       prArray.push(prDetails);
     });
 

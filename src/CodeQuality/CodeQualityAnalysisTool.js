@@ -55,11 +55,24 @@ class CodeQualityAnalysisTool {
   async getBugsFromFile(url) {
     try {
       const file = await this.getFile(url);
-      const report = cli.executeOnText(file);
-      // results is an array (length is always equal to 1) containing all the warning/error messages
-      if (!report || !report.results || !report.results[0]) {
+
+      if (!file) {
         return -1;
       }
+
+      const report = cli.executeOnText(file);
+
+      // results is an array (length is always equal to 1) containing all the warning/error messages
+      if (
+        !report
+        || !report.results
+        || !report.results[0]
+        || !report.results[0].messages
+        || Number.isNaN(report.results[0].messages.length)
+      ) {
+        return -1;
+      }
+
       return report.results[0].messages.length;
     } catch (error) {
       console.log(error);
