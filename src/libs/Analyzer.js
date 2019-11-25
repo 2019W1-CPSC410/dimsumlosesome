@@ -1,39 +1,58 @@
+import DataSetBuilder from '../DataPipeline/DataSetBuilder';
+
 class Analyzer {
+  constructor(owner, repo) {
+    this.owner = owner;
+    this.repo = repo;
+  }
 
-    constructor () {
-        this.apiResponse = {
-            "dateRepoCreated":"",
-            "plannedPRs":[],
-            "fastPRs":[]
-        };
-    }
+  async getDataPoints() {
+    const prArray = [];
 
-    getDataPoints(obj) {
-        this.apiResponse.dateRepoCreated = Object.keys(obj)[0];
-        let pullRequests = obj.pullRequests;
+    const dataSetBuilder = new DataSetBuilder(this.owner, this.repo);
+    const data = await dataSetBuilder.getFinalData();
+    data.forEach((prDetails, prKey, map) => {
+      const {
+        numberOfBugs,
+        numberOfCommits,
+        merged_at,
+        closed_at,
+        created_at,
+      } = prDetails;
+      if (!(numberOfBugs && numberOfCommits && merged_at && closed_at && created_at)) return;
+      prArray.push(prDetails);
+    });
 
-        for (let pr of pullRequests) {
-            let prNumber = Object.keys(pr)[0];
-            let datePRCreated = pr[prNumber].datePRCreated;
+    if (prArray.length === 0) return [];
 
-            let dateDifference = Date.parse(pr[prNumber].datePRMerged) - Date.parse(pr[prNumber].datePRCreated);
+    // Sort by created_at in ascending order
+    const sortedPRs = prArray.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+    const dateRepoCreated = sortedPRs[0].created_at;
 
-            if ((dateDifference / pr[prNumber].numberOfCommits) > 4 * 3600000) {
-                this.apiResponse.plannedPRs.push(
-                    {
-                        "datePRCreated": datePRCreated,
-                        "numberOfBugs": pr[prNumber].numberOfBugs
-                    });
-            } else {
-                this.apiResponse.fastPRs.push(
-                    {
-                        "datePRCreated": datePRCreated,
-                        "numberOfBugs": pr[prNumber].numberOfBugs
-                    });
-            }
-        }
-        return this.apiResponse;
-    }
+    const plannedPRs = [];
+    const fastPRs = [];
+
+    sortedPRs.forEach(pr => {
+      const {
+        created_at,
+        merged_at,
+        numberOfCommits,
+        numberOfBugs,
+      } = pr;
+      const datePRCreated = new Date(created_at);
+      const datePRMerged = new Date(merged_at);
+      const dateDifference = datePRMerged - datePRCreated;
+      const classifiedPR = { datePRCreated: created_at, numberOfBugs };
+
+      if (dateDifference / numberOfCommits > 4 * 3600000) {
+        plannedPRs.push(classifiedPR);
+      } else {
+        fastPRs.push(classifiedPR);
+      }
+    });
+
+    return { dateRepoCreated, plannedPRs, fastPRs };
+  }
 }
 
-export default Analyzer
+export default Analyzer;
