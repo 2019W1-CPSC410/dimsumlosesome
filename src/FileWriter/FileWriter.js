@@ -57,9 +57,10 @@ class FileWriter {
         })
     }
 
-    // Checks if file is JavasScript file by the file extension
-    isJavaScriptFile(fileName) {
-        return fileName.split('.').pop() === 'js';
+    // Checks if file is JavasScript or React JSX file by the file extension
+    isSupportedFile(fileName) {
+        const fileExtension = fileName.split('.').pop();
+        return fileExtension === 'js' || fileExtension === 'jsx';
     };
 }
 

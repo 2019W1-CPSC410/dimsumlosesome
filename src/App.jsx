@@ -1,5 +1,7 @@
 import React from 'react';
 import LinkComponent from './components/LinkComponent';
+// import Data from './Visualization/EmptyData';
+// import Visualization from './Visualization/Visualization';
 
 const App = () => {
   return (
@@ -7,6 +9,6 @@ const App = () => {
       <LinkComponent />
     </div>
   );
-}
+};
 
 export default App;

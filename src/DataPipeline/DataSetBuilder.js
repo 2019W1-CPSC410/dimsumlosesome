@@ -1,5 +1,5 @@
-import GitHubClient from "../GitHubAPI/GitHubClient";
-import CodeQualityAnalysisTool from '../CodeQuality/CodeQualityAnalysisTool';
+const { GitHubClient } = require('../GitHubAPI/GitHubClient');
+const { CodeQualityAnalysisTool } = require('../CodeQuality/CodeQualityAnalysisTool');
 
 class DataSetBuilder {
 
@@ -37,8 +37,9 @@ class DataSetBuilder {
 
     }
 
-    isJavaScriptFile (fileName) {
-        return fileName.split('.').pop() === 'js';
+    isSupportedFile (fileName) {
+        const fileExtension = fileName.split('.').pop();
+        return fileExtension === 'js' || fileExtension === 'jsx';
     };
 
     addToPRData (prNumber, dataObject) {
@@ -62,10 +63,10 @@ class DataSetBuilder {
                 this.buildPRData(prs).then((result) => {
                     resolve(result);
                 }).catch((err) => {
-                    console.log(err)
+                    console.log(err);
                 })
             }).catch((error) => {
-                console.log(err);
+                console.log(error);
                 reject(error);
             });
         })
@@ -83,7 +84,7 @@ class DataSetBuilder {
                         let prNumber = null;
                         let rawUrls = [];
                         file.map((value) => {
-                            if (this.isJavaScriptFile(value.raw_url)) {
+                            if (this.isSupportedFile(value.raw_url)) {
                                 prNumber = value.pull_number;
                                 rawUrls.push(value.raw_url);
                             }
@@ -113,4 +114,4 @@ class DataSetBuilder {
     };
 }
 
-export default DataSetBuilder;
+module.exports = { DataSetBuilder };
