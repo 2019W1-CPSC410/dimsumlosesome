@@ -16,7 +16,6 @@ class Visualization extends React.Component {
   }
 
   processDataForGraph = (data) => {
-    // TODO RUBEN Add check to not use those data points where the bug count = -1.
     const NUM_OF_MILLISECONDS_IN_A_DAY = 86400000;
     /**
      * Process all PRs data by normalizing the creation date values to display on the graph as well as
@@ -31,31 +30,35 @@ class Visualization extends React.Component {
     for (let i = 0; i < data.plannedPRs.length; i++) {
       let currentPRDayOffsetFromRepoCreation = ((new Date(data.plannedPRs[i].datePRCreated)).getTime() - repoCreationMilliseconds) / NUM_OF_MILLISECONDS_IN_A_DAY;
       let currentBugCount = data.plannedPRs[i].numberOfBugs;
-      if (currentPRDayOffsetFromRepoCreation > processedPRData.largestDayOffsetFromRepoCreation) {
-        processedPRData.largestDayOffsetFromRepoCreation = currentPRDayOffsetFromRepoCreation;
+      if (currentBugCount !== -1) {
+        if (currentPRDayOffsetFromRepoCreation > processedPRData.largestDayOffsetFromRepoCreation) {
+          processedPRData.largestDayOffsetFromRepoCreation = currentPRDayOffsetFromRepoCreation;
+        }
+        if (currentPRDayOffsetFromRepoCreation > processedPRData.largestPlannedPRsDayOffset) {
+          processedPRData.largestPlannedPRsDayOffset = currentPRDayOffsetFromRepoCreation;
+        }
+        if (currentBugCount > processedPRData.highestBugCount) {
+          processedPRData.highestBugCount = currentBugCount;
+        }
+        processedPRData.plannedPRs[i] = { x: currentPRDayOffsetFromRepoCreation, y: currentBugCount };
       }
-      if (currentPRDayOffsetFromRepoCreation > processedPRData.largestPlannedPRsDayOffset) {
-        processedPRData.largestPlannedPRsDayOffset = currentPRDayOffsetFromRepoCreation;
-      }
-      if (currentBugCount > processedPRData.highestBugCount) {
-        processedPRData.highestBugCount = currentBugCount;
-      }
-      processedPRData.plannedPRs[i] = { x: currentPRDayOffsetFromRepoCreation, y: currentBugCount };
     }
     // Process the fast PRs:
     for (let i = 0; i < data.fastPRs.length; i++) {
       let currentPRDayOffsetFromRepoCreation = ((new Date(data.fastPRs[i].datePRCreated)).getTime() - repoCreationMilliseconds) / NUM_OF_MILLISECONDS_IN_A_DAY;
       let currentBugCount = data.fastPRs[i].numberOfBugs;
-      if (currentPRDayOffsetFromRepoCreation > processedPRData.largestDayOffsetFromRepoCreation) {
-        processedPRData.largestDayOffsetFromRepoCreation = currentPRDayOffsetFromRepoCreation;
+      if (currentBugCount !== -1) {
+        if (currentPRDayOffsetFromRepoCreation > processedPRData.largestDayOffsetFromRepoCreation) {
+          processedPRData.largestDayOffsetFromRepoCreation = currentPRDayOffsetFromRepoCreation;
+        }
+        if (currentPRDayOffsetFromRepoCreation > processedPRData.largestFastPRsDayOffset) {
+          processedPRData.largestFastPRsDayOffset = currentPRDayOffsetFromRepoCreation;
+        }
+        if (currentBugCount > processedPRData.highestBugCount) {
+          processedPRData.highestBugCount = currentBugCount;
+        }
+        processedPRData.fastPRs[i] = { x: currentPRDayOffsetFromRepoCreation, y: currentBugCount };
       }
-      if (currentPRDayOffsetFromRepoCreation > processedPRData.largestFastPRsDayOffset) {
-        processedPRData.largestFastPRsDayOffset = currentPRDayOffsetFromRepoCreation;
-      }
-      if (currentBugCount > processedPRData.highestBugCount) {
-        processedPRData.highestBugCount = currentBugCount;
-      }
-      processedPRData.fastPRs[i] = { x: currentPRDayOffsetFromRepoCreation, y: currentBugCount };
     }
     return processedPRData;
   }
