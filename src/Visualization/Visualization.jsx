@@ -61,7 +61,6 @@ class Visualization extends React.Component {
   }
 
   render() {
-    // TODO RUBEN FIX THE GRAPH TO BE DISPLAYED WHEN NO DATA IS PROVIDED.
     const { data } = this.props;
     const LONG_PLANNED_PR_COLOR = 'black';
     const QUICKLY_WRITTEN_PR = 'red';
@@ -82,8 +81,8 @@ class Visualization extends React.Component {
         <XYPlot
           width={500}
           height={500}
-          xDomain={[0, processedPRData.largestDayOffsetFromRepoCreation]}
-          yDomain={[minYAxisVal, maxYAxisVal]}
+          xDomain={[0, processedPRData.largestDayOffsetFromRepoCreation || 10]}
+          yDomain={[minYAxisVal || 0, maxYAxisVal || 10]}
         >
           <XAxis title="Days since repository creation" />
           <YAxis title="Number of bugs caused" position="middle" />
