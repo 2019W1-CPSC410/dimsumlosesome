@@ -15,8 +15,8 @@ app.get('/', (req, res) => {
 });
 
 app.get('/analyze', async (req, res) => {
-  const { owner, repo } = req.query;
-  const analyzer = new Analyzer(owner, repo);
+  const { owner, repo, hours } = req.query;
+  const analyzer = new Analyzer(owner, repo, hours);
   const response = await analyzer.getDataPoints();
   res.send(response);
 });

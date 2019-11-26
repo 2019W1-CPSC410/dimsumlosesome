@@ -3,6 +3,7 @@ import {
   Button,
   CircularProgress,
   TextField,
+  Tooltip,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
@@ -11,12 +12,13 @@ import Visualization from '../Visualization/Visualization';
 const styles = {
   container: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: '15px 30px',
   },
   form: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
   },
   textField: {
@@ -24,6 +26,7 @@ const styles = {
     margin: '10px',
   },
   button: {
+    width: '400px',
     boxShadow: 'none',
     color: '#ffffff',
     fontWeight: 'bold',
@@ -40,6 +43,7 @@ class LinkComponent extends Component {
       loading: false,
       ownerName: '',
       repoName: '',
+      quickness: '',
       graphData: {
         dateRepoCreated: '',
         plannedPRs: [],
@@ -53,16 +57,15 @@ class LinkComponent extends Component {
   }
 
   onClickSubmit = async () => {
-    const { ownerName } = this.state;
-    const { repoName } = this.state;
-    if (!ownerName || !repoName) {
-      alert('Please enter both owner and repo names to proceed');
+    const { ownerName, repoName, quickness } = this.state;
+    if (!ownerName || !repoName || !quickness) {
+      alert('Please input all fields to proceed');
     }
 
     this.setState({ loading: true });
 
     try {
-      const response = await axios.get(`http://localhost:3010/analyze?owner=${ownerName}&repo=${repoName}`);
+      const response = await axios.get(`http://localhost:3010/analyze?owner=${ownerName}&repo=${repoName}&hours=${quickness}`);
       this.populateGraph(response);
     } catch (error) {
       console.log(error);
@@ -92,8 +95,16 @@ class LinkComponent extends Component {
             variant="outlined"
             onChange={(e) => this.onChangeTextField('repoName', e)}
             className={classes.textField}
-            label="Repo Name"
+            label="Repository Name"
           />
+          <Tooltip title="Define quickness threshold: speed of a Pull Request = number of lines changed / number of commits">
+            <TextField
+              variant="outlined"
+              onChange={(e) => this.onChangeTextField('quickness', e)}
+              className={classes.textField}
+              label="Quickness Threshold"
+            />
+          </Tooltip>
           <Button
             variant="contained"
             color="primary"

@@ -1,9 +1,10 @@
 const { DataSetBuilder } = require('../DataPipeline/DataSetBuilder');
 
 class Analyzer {
-  constructor(owner, repo) {
+  constructor(owner, repo, hours) {
     this.owner = owner;
     this.repo = repo;
+    this.hours = hours;
   }
 
   async getDataPoints() {
@@ -45,7 +46,7 @@ class Analyzer {
       const dateDifference = datePRMerged - datePRCreated;
       const classifiedPR = { datePRCreated: created_at, numberOfBugs };
 
-      if (dateDifference / numberOfCommits > 4 * 3600000) {
+      if (dateDifference / numberOfCommits > this.hours * 3600000) {
         plannedPRs.push(classifiedPR);
       } else {
         fastPRs.push(classifiedPR);
