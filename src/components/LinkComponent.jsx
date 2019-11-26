@@ -65,7 +65,7 @@ class LinkComponent extends Component {
     this.setState({ loading: true });
 
     try {
-      const response = await axios.get(`http://localhost:3010/analyze?owner=${ownerName}&repo=${repoName}&hours=${quickness}`);
+      const response = await axios.get(`http://localhost:3010/analyze?owner=${ownerName}&repo=${repoName}&value=${quickness}`);
       this.populateGraph(response);
     } catch (error) {
       console.log(error);
@@ -97,7 +97,7 @@ class LinkComponent extends Component {
             className={classes.textField}
             label="Repository Name"
           />
-          <Tooltip title="Define quickness threshold: speed of a Pull Request = number of lines changed / number of commits">
+          <Tooltip title="Define quickness threshold: speed of a Pull Request = Number of Lines Changed / Number of Commits">
             <TextField
               variant="outlined"
               onChange={(e) => this.onChangeTextField('quickness', e)}
