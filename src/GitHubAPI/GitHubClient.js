@@ -46,6 +46,18 @@ class GitHubClient {
         }
     };
 
+    async getPR(pull_number) {
+        try {
+            const response = await axios.get(this.getBaseUrl() + `pulls/${pull_number}${this.getAuthParameters()}`, headers);
+            let data = response.data;
+            return {additions: data.additions,
+            deletions: data.deletions};
+        } catch (error) {
+            console.log(error);
+            console.log("getPRForRepo")
+        }
+    };
+
     // gets the files for a given pull request
     async getFilesForPr(pull_number) {
         if (!pull_number) {

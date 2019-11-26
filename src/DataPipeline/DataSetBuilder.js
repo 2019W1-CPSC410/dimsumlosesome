@@ -13,8 +13,6 @@ class DataSetBuilder {
         return new Promise((resolve, reject) => {
             this.getMetaData().then(async (data) => {
                 let finalData = Array.from(data.values()).filter((dataValue) => {return dataValue.raw_urls}).map(async (dataValue) => {
-                    console.log('here!!!!!');
-
                     let prNumber = dataValue.pull_number;
                     let numberOfBugs = 0;
                     const bugsPromises = dataValue.raw_urls.map(async (url) => {
@@ -83,14 +81,17 @@ class DataSetBuilder {
 
                         let prNumber = null;
                         let rawUrls = [];
+                        let sumOfChanges = 0;
                         file.map((value) => {
                             if (this.isSupportedFile(value.raw_url)) {
                                 prNumber = value.pull_number;
                                 rawUrls.push(value.raw_url);
+                                sumOfChanges = sumOfChanges + value.changes;
                             }
                         });
                         if (prNumber && rawUrls.length > 0) {
-                            this.addToPRData(prNumber, {raw_urls: rawUrls});
+                            this.addToPRData(prNumber, {raw_urls: rawUrls,
+                            numberOfChanges: sumOfChanges});
                             promiseArr.push(this.client.getNumberOfCommitsForPR(prNumber));
                         }
                     }
