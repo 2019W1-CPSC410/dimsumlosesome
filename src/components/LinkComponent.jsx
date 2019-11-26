@@ -97,12 +97,12 @@ class LinkComponent extends Component {
             className={classes.textField}
             label="Repository Name"
           />
-          <Tooltip title="The system uses review effort to measure if the code was written quickly. Enter the number of hours to define what is considered as quick.">
+          <Tooltip title="Define quickness threshold">
             <TextField
               variant="outlined"
               onChange={(e) => this.onChangeTextField('quickness', e)}
               className={classes.textField}
-              label="Review Time per Commit"
+              label="Quickness Threshold"
             />
           </Tooltip>
           <Button
