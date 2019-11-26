@@ -97,7 +97,7 @@ class LinkComponent extends Component {
             className={classes.textField}
             label="Repository Name"
           />
-          <Tooltip title="Define quickness threshold: speed of a Pull Request = Number of Lines Changed / Number of Commits">
+          <Tooltip title="Define quickness threshold: speed of a Pull Request = Number of Lines Changed / Commit">
             <TextField
               variant="outlined"
               onChange={(e) => this.onChangeTextField('quickness', e)}
