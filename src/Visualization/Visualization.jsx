@@ -16,12 +16,16 @@ class Visualization extends React.Component {
   }
 
   processDataForGraph = (data) => {
+    // TODO RUBEN Add check to not use those data points where the bug count = -1.
     const NUM_OF_MILLISECONDS_IN_A_DAY = 86400000;
     /**
      * Process all PRs data by normalizing the creation date values to display on the graph as well as
      * finding the largest values for each axis.
      */
-    let processedPRData = { plannedPRs: [], fastPRs: [], largestDayOffsetFromRepoCreation: 0, highestBugCount: 0 };
+    let processedPRData = {
+      plannedPRs: [], fastPRs: [], largestDayOffsetFromRepoCreation: 0, highestBugCount: 0,
+      largestPlannedPRsDayOffset: 0, largestFastPRsDayOffset: 0
+    };
     let repoCreationMilliseconds = (new Date(data.dateRepoCreated)).getTime();
     // Process the planned PRs:
     for (let i = 0; i < data.plannedPRs.length; i++) {
@@ -29,6 +33,9 @@ class Visualization extends React.Component {
       let currentBugCount = data.plannedPRs[i].numberOfBugs;
       if (currentPRDayOffsetFromRepoCreation > processedPRData.largestDayOffsetFromRepoCreation) {
         processedPRData.largestDayOffsetFromRepoCreation = currentPRDayOffsetFromRepoCreation;
+      }
+      if (currentPRDayOffsetFromRepoCreation > processedPRData.largestPlannedPRsDayOffset) {
+        processedPRData.largestPlannedPRsDayOffset = currentPRDayOffsetFromRepoCreation;
       }
       if (currentBugCount > processedPRData.highestBugCount) {
         processedPRData.highestBugCount = currentBugCount;
@@ -42,6 +49,9 @@ class Visualization extends React.Component {
       if (currentPRDayOffsetFromRepoCreation > processedPRData.largestDayOffsetFromRepoCreation) {
         processedPRData.largestDayOffsetFromRepoCreation = currentPRDayOffsetFromRepoCreation;
       }
+      if (currentPRDayOffsetFromRepoCreation > processedPRData.largestFastPRsDayOffset) {
+        processedPRData.largestFastPRsDayOffset = currentPRDayOffsetFromRepoCreation;
+      }
       if (currentBugCount > processedPRData.highestBugCount) {
         processedPRData.highestBugCount = currentBugCount;
       }
@@ -51,6 +61,7 @@ class Visualization extends React.Component {
   }
 
   render() {
+    // TODO RUBEN FIX THE GRAPH TO BE DISPLAYED WHEN NO DATA IS PROVIDED.
     const { data } = this.props;
     const LONG_PLANNED_PR_COLOR = 'black';
     const QUICKLY_WRITTEN_PR = 'red';
@@ -61,8 +72,8 @@ class Visualization extends React.Component {
     let yValuesInBestFitLines = [
       fastPRsBestFitLine(0),
       plannedLongPRsBestFitLine(0),
-      plannedLongPRsBestFitLine(processedPRData.largestDayOffsetFromRepoCreation),
-      fastPRsBestFitLine(processedPRData.largestDayOffsetFromRepoCreation)];
+      plannedLongPRsBestFitLine(processedPRData.largestPlannedPRsDayOffset),
+      fastPRsBestFitLine(processedPRData.largestFastPRsDayOffset)];
     let maxYAxisVal = Math.max(...yValuesInBestFitLines),
       minYAxisVal = Math.min(...yValuesInBestFitLines);
 
@@ -88,7 +99,7 @@ class Visualization extends React.Component {
             color={LONG_PLANNED_PR_COLOR}
             data={[
               { x: 0, y: plannedLongPRsBestFitLine(0) },
-              { x: processedPRData.largestDayOffsetFromRepoCreation, y: plannedLongPRsBestFitLine(processedPRData.largestDayOffsetFromRepoCreation) },
+              { x: processedPRData.largestPlannedPRsDayOffset, y: plannedLongPRsBestFitLine(processedPRData.largestPlannedPRsDayOffset) },
             ]}
           />
           <MarkSeries
@@ -101,7 +112,7 @@ class Visualization extends React.Component {
             color={QUICKLY_WRITTEN_PR}
             data={[
               { x: 0, y: fastPRsBestFitLine(0) },
-              { x: processedPRData.largestDayOffsetFromRepoCreation, y: fastPRsBestFitLine(processedPRData.largestDayOffsetFromRepoCreation) },
+              { x: processedPRData.largestFastPRsDayOffset, y: fastPRsBestFitLine(processedPRData.largestFastPRsDayOffset) },
             ]}
           />
         </XYPlot>
