@@ -1,32 +1,40 @@
-SCRIPT
-The intent of your visualisation:
-SE Task: To compare which of the two development approaches produces less code smells on average:
-Committing often and iterate on it
-Do a longer process of planning and just write it once.
-Why is this important? → Efficient use of time for developers
+## The intent of your visualisation:
+- SE Task: To compare which of the two development approaches is better:
+	  - Committing often and iterate on it
+		- Do a longer process of planning and just write it once.
+	- Why is this important? → Efficient use of time for developers
+    
 
-The original design
-We started off by defining what is “better” and the speed of development
-“Better” - Measuring the quality of the code
-“Speed” - The frequency of commits in a Pull Request (PR)
-We were interested in seeing the overall trend in a repo for the two different development approaches so we classified PRs into two categories: “slow” and “quick”
+-   The original design
+	- We started off by defining what is “better” and the speed of development
+		- “Better” - Measuring the quality of the code
+		- “Speed” - The frequency of commits in a Pull Request (PR)
+	- We were interested in seeing the overall trend in a repo for the two different development approaches so we classified PRs into two categories: “slow” and “quick”
+    
 
-The outcome of your prototype testing
-We came up with some potential charts and showed them to the users. Although some charts are more informative and shows more statistical information like means and standard deviations, we settled with a scatterplot with best fit line because most users found the other options hard to read or confusing. Our focus is to help developers, hence we aimed for easy-to-read or use graphs.
-Definition of “Speed” changed as developers seem to be more concerned with how quickly the PRs are merged and we took into consideration the time needed for each commit (time merged minus time created) in a PR - anything that takes more than 4 hours between commits (threshold value that we defined) is considered as taking a longer time to plan.
+-   The outcome of your prototype testing
+	- We came up with some potential charts and showed them to the users. Although some charts are more informative and shows more statistical information like means and standard deviations, we settled with a scatterplot with best fit line because most users found the other options hard to read or confusing. Our focus is to help developers, hence we aimed for easy-to-read or use graphs.
+	- Definition of “Speed” was unclear, as developers seem to automatically associate PRs with merge time. Hence, we refined the definition to number of lines changed per commit and determined the threshold value was 4.
+    
 
-The new design
-Finalized axis labels (Y = # of bugs caused, X = days since repo created) & added best fit line legend
-Not much difference from what we originally envisioned
+-   The new design
+	- Finalized axis labels (Y = # of bugs caused, X = days since repo created) and added best fit line legend.
+	- Not much difference from what we originally envisioned, except instead of us defining what is considered as "quick", we allowed the user to input a value for that, which is more flexible and generalizable to different project needs.
+		- During testing phase, we found that some repositories did not generate meaningful data when the threshold value was set at 4 because all commits had more than 4 lines of change in each commit.
+    
 
-The outcome of your end-user testing
-Our visualization was clear, users understood what was going on, they said it was a great visualization tool and could clearly see what type of committing habit was good for what types of situations.
+-   The outcome of your end-user testing
+	- Our visualization was clear, users understood what was going on, 66.7% of users in our second round of user studies agreed that it was a great visualization tool and could clearly see what type of committing habit was good for what types of situations.
+ 
+## Roles
 
-Roles
-Patrick: Data pipeline for fetching data from Github repos
-Candice: Code quality analysis tool setup and configurations
-Andy: Analysis script to combine and convert metadata properties and code quality measurements into usable format for visualization
-Regina and Ruben: Visualization and app hook up for dynamic input and flexibility enhancement	
+-   Patrick: Data pipeline for fetching data from Github repos
+    
+-   Candice: Code quality analysis tool setup and configurations
+    
+-   Andy: Analysis script to combine and convert metadata properties and code quality measurements into usable format for visualization
+    
+-   Regina and Ruben: Visualization and app hook up for dynamic input and flexibility enhancement
 
 --
 
