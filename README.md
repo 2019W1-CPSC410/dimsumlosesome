@@ -1,3 +1,35 @@
+SCRIPT
+The intent of your visualisation:
+SE Task: To compare which of the two development approaches produces less code smells on average:
+Committing often and iterate on it
+Do a longer process of planning and just write it once.
+Why is this important? → Efficient use of time for developers
+
+The original design
+We started off by defining what is “better” and the speed of development
+“Better” - Measuring the quality of the code
+“Speed” - The frequency of commits in a Pull Request (PR)
+We were interested in seeing the overall trend in a repo for the two different development approaches so we classified PRs into two categories: “slow” and “quick”
+
+The outcome of your prototype testing
+We came up with some potential charts and showed them to the users. Although some charts are more informative and shows more statistical information like means and standard deviations, we settled with a scatterplot with best fit line because most users found the other options hard to read or confusing. Our focus is to help developers, hence we aimed for easy-to-read or use graphs.
+Definition of “Speed” changed as developers seem to be more concerned with how quickly the PRs are merged and we took into consideration the time needed for each commit (time merged minus time created) in a PR - anything that takes more than 4 hours between commits (threshold value that we defined) is considered as taking a longer time to plan.
+
+The new design
+Finalized axis labels (Y = # of bugs caused, X = days since repo created) & added best fit line legend
+Not much difference from what we originally envisioned
+
+The outcome of your end-user testing
+Our visualization was clear, users understood what was going on, they said it was a great visualization tool and could clearly see what type of committing habit was good for what types of situations.
+
+Roles
+Patrick: Data pipeline for fetching data from Github repos
+Candice: Code quality analysis tool setup and configurations
+Andy: Analysis script to combine and convert metadata properties and code quality measurements into usable format for visualization
+Regina and Ruben: Visualization and app hook up for dynamic input and flexibility enhancement	
+
+--
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
