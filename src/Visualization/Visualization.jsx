@@ -57,13 +57,22 @@ class Visualization extends React.Component {
     const processedPRData = this.processDataForGraph(data);
     const plannedLongPRsBestFitLine = this.getBestFitLine(processedPRData.plannedPRs);
     const fastPRsBestFitLine = this.getBestFitLine(processedPRData.fastPRs);
+    // Find the min and max values for the Y axis:
+    let yValuesInBestFitLines = [
+      fastPRsBestFitLine(0),
+      plannedLongPRsBestFitLine(0),
+      plannedLongPRsBestFitLine(processedPRData.largestDayOffsetFromRepoCreation),
+      fastPRsBestFitLine(processedPRData.largestDayOffsetFromRepoCreation)];
+    let maxYAxisVal = Math.max(...yValuesInBestFitLines),
+      minYAxisVal = Math.min(...yValuesInBestFitLines);
+
     return (
       <div>
         <XYPlot
           width={500}
           height={500}
           xDomain={[0, processedPRData.largestDayOffsetFromRepoCreation]}
-          yDomain={[0, processedPRData.highestBugCount]}
+          yDomain={[minYAxisVal, maxYAxisVal]}
         >
           <XAxis title="Days since repository creation" />
           <YAxis title="Number of bugs caused" position="middle" />
@@ -79,7 +88,7 @@ class Visualization extends React.Component {
             color={LONG_PLANNED_PR_COLOR}
             data={[
               { x: 0, y: plannedLongPRsBestFitLine(0) },
-              { x: processedPRData.largestDayOffsetFromRepoCreation, y: plannedLongPRsBestFitLine(1) },
+              { x: processedPRData.largestDayOffsetFromRepoCreation, y: plannedLongPRsBestFitLine(processedPRData.largestDayOffsetFromRepoCreation) },
             ]}
           />
           <MarkSeries
@@ -92,7 +101,7 @@ class Visualization extends React.Component {
             color={QUICKLY_WRITTEN_PR}
             data={[
               { x: 0, y: fastPRsBestFitLine(0) },
-              { x: processedPRData.largestDayOffsetFromRepoCreation, y: fastPRsBestFitLine(1) },
+              { x: processedPRData.largestDayOffsetFromRepoCreation, y: fastPRsBestFitLine(processedPRData.largestDayOffsetFromRepoCreation) },
             ]}
           />
         </XYPlot>
