@@ -1,14 +1,15 @@
-## The intent of your visualisation:
-- SE Task: To compare which of the two development approaches is better:
-	  - Committing often and iterate on it
+## Overall Process
+-   The intent of your visualisation:
+	- SE Task: To compare which of the two development approaches is better:
+		- Committing often and iterate on it
 		- Do a longer process of planning and just write it once.
-	- Why is this important? → Efficient use of time for developers
+	* Why is this important? → Efficient use of time for developers
     
 
 -   The original design
 	- We started off by defining what is “better” and the speed of development
 		- “Better” - Measuring the quality of the code
-		- “Speed” - The frequency of commits in a Pull Request (PR)
+		- “Speed” - The frequency of commits in a merged Pull Request (PR)
 	- We were interested in seeing the overall trend in a repo for the two different development approaches so we classified PRs into two categories: “slow” and “quick”
     
 
@@ -25,6 +26,7 @@
 
 -   The outcome of your end-user testing
 	- Our visualization was clear, users understood what was going on, 66.7% of users in our second round of user studies agreed that it was a great visualization tool and could clearly see what type of committing habit was good for what types of situations.
+	- 33.3% of users pointed out that they could see towards the deadline of a school project, the repository's PRs were merged more frequently and more prone to error.
  
 ## Roles
 
