@@ -79,7 +79,7 @@ class Visualization extends React.Component {
             color={LONG_PLANNED_PR_COLOR}
             data={[
               { x: 0, y: plannedLongPRsBestFitLine(0) },
-              { x: processedPRData.largestDayOffsetFromRepoCreation, y: plannedLongPRsBestFitLine(1) },
+              { x: processedPRData.largestDayOffsetFromRepoCreation, y: plannedLongPRsBestFitLine(processedPRData.largestDayOffsetFromRepoCreation) },
             ]}
           />
           <MarkSeries
@@ -92,7 +92,7 @@ class Visualization extends React.Component {
             color={QUICKLY_WRITTEN_PR}
             data={[
               { x: 0, y: fastPRsBestFitLine(0) },
-              { x: processedPRData.largestDayOffsetFromRepoCreation, y: fastPRsBestFitLine(1) },
+              { x: processedPRData.largestDayOffsetFromRepoCreation, y: fastPRsBestFitLine(processedPRData.largestDayOffsetFromRepoCreation) },
             ]}
           />
         </XYPlot>
